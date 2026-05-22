@@ -1,0 +1,65 @@
+graph TD
+    %% Global Styling
+    classDef stage fill:#f9f9f9,stroke:#333,stroke-width:1px,stroke-dasharray: 5 5;
+    classDef module fill:#fff,stroke:#0066cc,stroke-width:2px;
+    classDef data fill:#e6f2ff,stroke:#0066cc,stroke-width:1px;
+    classDef risk fill:#fff5f5,stroke:#cc0000,stroke-width:1px;
+
+    %% Stage 1
+    subgraph Stage1 ["Stage 1: Trigger & Data Capture"]
+        M1["Module 1: Airtable Watch Records<br/>(Trigger: {Automation Status} = 'Processing')"]
+    end
+    class Stage1 stage; class M1 module;
+
+    %% Stage 2
+    subgraph Stage2 ["Stage 2: File Acquisition"]
+        M9["Module 9: Tools > Set Variable<br/>(Extracts cvURL from CV Attachment[0])"]
+        M_HTTP["HTTP > Make a Request<br/>(Downloads Binary Buffer via GET)"]
+    end
+    class Stage2 stage; class M9,M_HTTP module;
+
+    %% Stage 3
+    subgraph Stage3 ["Stage 3: Document Extraction"]
+        M24["Module 24: HTTP > Make a Request (PDF.co)<br/>(POST to /v1/pdf/convert/to/text)"]
+    end
+    class Stage3 stage; class M24 module;
+
+    %% Stage 4
+    subgraph Stage4 ["Stage 4: AI Inference"]
+        M27["Module 27: Groq > Create a Chat Completion<br/>(llama-3.1-8b-instant | Temp: 0.3)"]
+    end
+    class Stage4 stage; class M27 module;
+
+    %% Stage 5
+    subgraph Stage5 ["Stage 5: Response Parsing"]
+        M29["Module 29: JSON > Parse JSON<br/>(Validates text into structured pills)"]
+    end
+    class Stage5 stage; class M29 module;
+
+    %% Stage 6
+    subgraph Stage6 ["Stage 6: Data Persistence"]
+        M30["Module 30: Airtable > Update a Record<br/>(Writes AI Summary & Match Score)"]
+        M33["Module 33: Airtable > Update a Record<br/>(Sets Status to 'Done')"]
+    end
+    class Stage6 stage; class M30,M33 module;
+
+    %% Data Flow Connections
+    M1 -->|Candidate Record & Signed URL| M9
+    M9 -->|cvURL| M_HTTP
+    M_HTTP -->|Binary Data Buffer| M24
+    M24 -->|Extracted Plain Text| M27
+    M27 -->|Raw JSON String| M29
+    M29 -->|years_experience, key_skills, top_projects, overall_score| M30
+    M30 -->|Triggers Last Modified Time| M33
+    M33 -->|Terminal State reached| End([Scenario Ends / No Loop])
+
+    %% Risk Matrix Integration (Linked to specific vulnerability points)
+    R1["<b>Gap:</b> No error handlers<br/><b>Risk:</b> Scenario hangs on failure<br/><b>Fix:</b> Add handlers to PDF.co & Groq"]
+    R2["<b>Gap:</b> Single attachment assumption<br/><b>Risk:</b> Crashes on multi-file uploads<br/><b>Fix:</b> Add array check + iterator"]
+    R3["<b>Gap:</b> Infinite Loop Risk<br/><b>Risk:</b> Downstream updates re-trigger flow<br/><b>Fix:</b> Handled via Module 33 'Done' state"]
+
+    class R1,R2,R3 risk;
+    M24 -.-> R1
+    M27 -.-> R1
+    M9 -.-> R2
+    M33 -.-> R3
