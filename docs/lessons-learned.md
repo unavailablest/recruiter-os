@@ -1,15 +1,6 @@
-# Lessons Learned: Why Airtable Over SQL
+## Lessons Learned
 
-## The Choice
-I chose Airtable because:
-- Schema changes in seconds, not migrations
-- Built-in Interface Designer for stakeholder demos
-- Attachment handling native, not blob storage
-
-## The Cost
-- 14-day trial pressure forces shipping fast
-- API limits require caching strategy
-- No foreign key constraints = discipline in Make.com filters
-
-## The Result
-Built functional AI recruitment pipeline in a week vs. 3 weeks estimated for SQL + React frontend.
+- No-code stack cut MVP time from estimated weeks to days
+- Built-in form handling + database + views eliminated frontend work
+- Trial pressure (14-day Airtable) forced fast shipping decisions
+- Markdown cleanup and error routing were unplanned but critical
