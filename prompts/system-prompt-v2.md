@@ -106,8 +106,8 @@ Return ONLY valid JSON. No markdown, no explanation, no code fences. Start with 
 ### Required JSON structure:
 ```json
 {
-  "job_title": string,
-  "full_name": string,
+  "job_title": [string],
+  "full_name": [string],
   "overall_score": integer,
   "years_experience": number,
   "key_skills": [string],
