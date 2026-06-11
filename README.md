@@ -46,6 +46,9 @@ Tally → Airtable → Make.com → PDF.co → Groq → Gmail
 - **AI:** Groq (openai gpt-oss-20b)
 - **Email:** Gmail
 
+## Demo
+https://youtu.be/NbGVLt4_2L8
+
 ## Status
 MVP complete. Piloting with agencies.
 
