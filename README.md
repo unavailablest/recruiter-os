@@ -47,7 +47,7 @@ Tally → Airtable → Make.com → PDF.co → Groq → Gmail
 - **Email:** Gmail
 
 ## Demo
-https://youtu.be/NbGVLt4_2L8
+https://www.loom.com/share/9accb840c4414fd6a2652a607be70578
 
 ## Status
 MVP complete. Piloting with agencies.
